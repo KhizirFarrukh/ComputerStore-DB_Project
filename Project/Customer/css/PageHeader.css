@@ -1,0 +1,28 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.header {
+    margin-left: 16%;
+    margin-right: 11%;
+    display: grid;
+    grid-template-columns: 2.5fr 8fr 2fr;
+}
+.title {
+    margin-left: 10px;
+    float: left;
+}
+.SearchBar {
+    margin-left: 10%;
+    margin-top: 20px;
+}
+.Account {
+    margin-top: 20px;
+    margin-right: 0px;
+    display: flex;
+}
+.TextBox {
+    padding-left: 10px;
+    padding-right: 10px;
+}

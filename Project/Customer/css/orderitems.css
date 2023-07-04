@@ -1,0 +1,44 @@
+.body {
+    margin-left: 17%;
+    margin-right: 10%;
+    font-family: sans-serif;
+}
+.OrderItems {
+    padding-left: 10px;
+    background-color: white;
+}
+#ItemsHeader {
+    font-weight: bold;
+    font-size: 32px;
+}
+#ItemsBody {
+    font-size: 20px;
+    height: 35px;
+}
+#PName {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 550px;
+}
+#Quantity {
+    text-align: center;
+}
+#Price, #TotalAmount {
+    white-space: nowrap;
+}
+table {
+    margin-top: 25px;
+    margin-left: 40px;
+    text-align: left;
+}
+table, th, td {
+    font-family: sans-serif;
+    border: 1px solid black;
+}
+td , th{
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}

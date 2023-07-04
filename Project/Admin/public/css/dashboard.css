@@ -1,0 +1,95 @@
+body {
+  margin: 0 auto;
+  background: #ecf0f5;
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 100px;
+  max-width: 1500px;
+  height: 500px;
+}
+
+.block {
+  display: flex;
+  flex-wrap: wrap;
+  filter: drop-shadow(1px 1px 1px #c1d5fa);
+  text-decoration: none;
+  color: black;
+}
+
+.block:hover .block-title {
+  text-decoration: underline;
+}
+
+.block-right {
+  background: #e0e7f3;
+  width: 200px;
+  text-align: left;
+  padding-left: 20px;
+  text-transform: uppercase;
+  position: relative;
+}
+
+.block-left {
+  width: 140px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.block:nth-child(1) > .block-left {
+  background: #e34234;
+}
+
+.block:nth-child(2) > .block-left {
+  background: #00a65a;
+}
+
+.block:nth-child(3) > .block-left {
+  background: #0d698b;
+}
+
+.block:nth-child(4) > .block-left {
+  background: #76644f;
+}
+
+.block:nth-child(5) > .block-left {
+  background: #7a871e;
+}
+
+.block:nth-child(6) > .block-left {
+  background: #e87a00;
+}
+
+.block-icon {
+  color: white;
+  margin-top: 0 auto;
+}
+
+.block-count {
+  font-weight: 900;
+}
+
+@media only screen and (max-width: 580px) {
+  .block-left {
+    width: 200px;
+  }
+}

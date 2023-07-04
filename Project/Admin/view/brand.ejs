@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Brands</title>
+    <link rel="stylesheet" href="/brands.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="search-bar">
+        <div class="search-wrapper">
+          <div class="search-icon-wrapper">
+            <i class="fas fa-search fa-lg searchIcon"></i>
+          </div>
+          <input class="search" type="text" placeholder="Search ID or Name" />
+        </div>
+      </div>
+      <table class="data-table" style="width: 100%">
+        <thead>
+          <tr class="table-columns">
+            <th class="id-col" scope="col">ID</th>
+            <th class="logo-col" scope="col">Logo</th>
+            <th scope="col">Name</th>
+            <th class="edit-col" scope="col"></th>
+            <th class="delete-col" scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for(let i = 0 ; i < brands.length ; i++) { %>
+          <tr>
+            <td data-label="ID"><%= brands[i].id %></td>
+            <td class="brand-logo" data-label="Logo"><img class="logo" src="/logo/<%= brands[i].logo %>" alt="<%= brands[i].name %>-logo" /></td>
+            <td class="brand-name" data-label="Name"><%= brands[i].name %></td>
+            <td data-label=""><i class="far fa-edit edit-button" data-index="<%= brands[i].id %>"></i></td>
+            <td data-label=""><i class="fas fa-trash-alt delete-button" data-index="<%= brands[i].id %>"></i></td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+      <div class="pages">
+        <% if(pagination) { if(currentPage - 1 > 0) { %>
+        <a class="input" href="?page=<%= currentPage-1 %>">&lt;</a>
+        <% } %> <% } %> <% for(let i = pageStart ; i <= pageEnd ; i++) { %>
+        <a class="input" href="?page=<%= i %>"><%= i %></a>
+        <% } %> <% if(pagination) { if(currentPage + 1 <= maxPage) { %>
+        <a class="input" href="?page=<%= currentPage+1 %>">&gt;</a>
+        <% } %> <% } %>
+      </div>
+    </div>
+  </body>
+  <script src="https://kit.fontawesome.com/85c08616f2.js" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    $(document).ready(() => {
+      $(".search").on("input", (event) => {
+        const searchVal = $(".search").val();
+        $.ajax({
+          type: "get",
+          data: {
+            searchVal: searchVal,
+          },
+          success: (response) => {
+            $(".data-table").html(jQuery(response).find(".data-table").html());
+            $(".pages").html(jQuery(response).find(".pages").html());
+          },
+          error: (error) => {
+            console.log(error);
+            alert("Error retrieving data!");
+          },
+        });
+      });
+
+      $(document).on("click", ".logo", (event) => {
+        const parentCell = event.target.parentNode;
+        if (parentCell.querySelector("#brand-logo")) parentCell.querySelector("#brand-logo").click();
+      });
+
+      $(document).on("change", "#brand-logo", (event) => {
+        const parentCell = event.target.parentNode;
+        if (parentCell.querySelector(".logo")) parentCell.querySelector(".logo").attributes["src"].value = URL.createObjectURL(event.target.files[0]);
+      });
+
+      $(document).on("click", ".edit-button", (event) => {
+        const parentRow = event.target.parentNode.parentNode;
+        if (parentRow.querySelector("#brand-name") || parentRow.querySelector("#brand-loog")) {
+          return;
+        }
+
+        parentRow.style.border = "2px solid green";
+        const brandName = parentRow.querySelector(".brand-name");
+        const brandLogo = parentRow.querySelector(".brand-logo");
+        const editButton = parentRow.querySelector(".edit-button");
+        const deleteButton = parentRow.querySelector(".delete-button");
+        brandName.innerHTML = `<input class="search" id="brand-name" type="text" value='${brandName.innerHTML}' data-prev="${brandName.innerHTML}" style="width: 80%; height: 50px; border: 1px solid grey;"/>`;
+        brandLogo.innerHTML += `<input accept=".jpg,.png, .svg, .jpeg" id="brand-logo" type="file" data-prev= "${brandLogo.querySelector(".logo").attributes["src"].value}" style="display:none" >`;
+        editButton.classList = ["far fa-check-circle fa-lg confirm"];
+        deleteButton.classList = ["far fa-times-circle fa-lg cancel"];
+      });
+
+      $(document).on("click", ".cancel", (event) => {
+        const parentRow = event.target.parentNode.parentNode;
+        const brandName = parentRow.querySelector(".brand-name");
+        const brandLogo = parentRow.querySelector(".brand-logo");
+        const editButton = parentRow.querySelector(".confirm");
+        const deleteButton = parentRow.querySelector(".cancel");
+        brandName.innerHTML = parentRow.querySelector("#brand-name").attributes["data-prev"].value;
+        brandLogo.querySelector(".logo").attributes["src"].value = brandLogo.querySelector("#brand-logo").attributes["data-prev"].value;
+        brandLogo.removeChild(brandLogo.querySelector("#brand-logo"));
+        editButton.classList = ["far fa-edit edit-button"];
+        deleteButton.classList = ["fas fa-trash-alt delete-button"];
+        parentRow.style.border = "none";
+      });
+
+      $(document).on("click", ".confirm", (event) => {
+        const parentRow = event.target.parentNode.parentNode;
+        const index = parseInt(event.target.attributes["data-index"].value);
+        const brandName = parentRow.querySelector("#brand-name").value;
+        const brandLogo = parentRow.querySelector("#brand-logo").files[0];
+
+        const formData = new FormData();
+        formData.append("status", 0);
+        formData.append("index", parseInt(event.target.attributes["data-index"].value));
+        formData.append("brandName", parentRow.querySelector("#brand-name").value);
+        formData.append("brandLogo", parentRow.querySelector("#brand-logo").files[0]);
+
+        $.ajax({
+          type: "post",
+          url: "./brands/update",
+          data: formData,
+          contentType: false,
+          processData: false,
+          success: (response) => {
+            if (response) {
+              const brandLogo = parentRow.querySelector(".brand-logo");
+              parentRow.style.border = "none";
+              parentRow.querySelector(".brand-name").innerHTML = parentRow.querySelector("#brand-name").value;
+              parentRow.querySelector(".confirm").classList = ["far fa-edit edit-button"];
+              parentRow.querySelector(".cancel").classList = ["fas fa-trash-alt delete-button"];
+              brandLogo.removeChild(brandLogo.querySelector("#brand-logo"));
+              alert("Updated!");
+            }
+          },
+        });
+      });
+
+      $(document).on("click", ".delete-button", (event) => {
+        const parentRow = event.target.parentNode.parentNode;
+        parentRow.style.border = "2px solid red";
+
+        setTimeout(() => {
+          const action = confirm("Are you sure you want to delete?");
+          if (action) {
+            const index = event.target.attributes["data-index"].value;
+            $.ajax({
+              type: "post",
+              data: {
+                status: -1,
+                index: index,
+              },
+              success: (response) => {
+                if (response) {
+                  location.reload();
+                }
+              },
+            });
+          } else {
+            parentRow.style.border = "none";
+          }
+        }, 100);
+      });
+    });
+  </script>
+</html>

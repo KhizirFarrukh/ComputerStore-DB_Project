@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <a class="block" href="javascript:void(0);">
+        <div class="block-left">
+          <i class="fas fa-shopping-cart fa-7x block-icon"> </i>
+        </div>
+        <div class="block-right">
+          <i class="fas fa-exclamation fa-4x" style="position: absolute; top: -20px; left: 180px; z-index: 999999; color: darkorange"></i>
+          <p class="block-title">Orders</p>
+          <p class="block-count">79</p>
+        </div>
+      </a>
+      <a class="block" href="javascript:void(0);">
+        <div class="block-left">
+          <i class="fas fa-warehouse fa-7x block-icon"> </i>
+        </div>
+        <div class="block-right">
+          <p class="block-title">Inventory</p>
+          <p class="block-count">79</p>
+        </div>
+      </a>
+      <a class="block" href="/dashboard/products">
+        <div class="block-left">
+          <i class="fas fa-cube fa-7x block-icon"> </i>
+        </div>
+        <div class="block-right">
+          <p class="block-title">Products</p>
+          <p class="block-count"><%= productCount %></p>
+        </div>
+      </a>
+      <a class="block" href="/dashboard/categories">
+        <div class="block-left">
+          <i class="fas fa-sitemap fa-7x block-icon"> </i>
+        </div>
+        <div class="block-right">
+          <p class="block-title">Categories</p>
+          <p class="block-count"><%= categoryCount %></p>
+        </div>
+      </a>
+      <a class="block" href="/dashboard/brands">
+        <div class="block-left">
+          <i class="fas fa-handshake fa-7x block-icon"> </i>
+        </div>
+        <div class="block-right">
+          <p class="block-title">Brands</p>
+          <p class="block-count"><%= brandCount %></p>
+        </div>
+      </a>
+      <a class="block" href="/dashboard/customers">
+        <div class="block-left">
+          <i class="fas fa-users fa-7x block-icon"> </i>
+        </div>
+        <div class="block-right">
+          <p class="block-title">Customers</p>
+          <p class="block-count"><%= customerCount %></p>
+        </div>
+      </a>
+    </div>
+  </body>
+  <script src="https://kit.fontawesome.com/85c08616f2.js" crossorigin="anonymous"></script>
+</html>

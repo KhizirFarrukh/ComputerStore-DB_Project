@@ -1,0 +1,29 @@
+body {
+  background: #dcdcdd;
+}
+
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.searchWrapper {
+  width: 500px;
+  height: 40px;
+  border-radius: 5px;
+}
+
+.search:focus {
+  border: none;
+  outline: none;
+}
+
+.search {
+  width: 100%;
+  background: red;
+  /* background: transparent; */
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+}

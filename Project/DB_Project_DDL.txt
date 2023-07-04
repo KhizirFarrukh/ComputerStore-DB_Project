@@ -1,0 +1,109 @@
+create table brands (
+	id int primary key auto_increment,
+    name varchar(64) unique,
+    logo varchar(256) DEFAULT NULL
+);
+
+create table categories(
+	id int primary key auto_increment,
+    name varchar(64) NOT NULL UNIQUE,
+    parentID int DEFAULT NULL
+);
+alter table categories add constraint cat_fkey foreign key(parentID) references categories(id) ON DELETE CASCADE;
+
+create table customers (
+	id int primary key auto_increment,
+    email varchar(320) NOT NULL UNIQUE,
+    password binary(60) NOT NULL,
+    firstName varchar(50) NOT NULL,
+    lastName varchar(50) NOT NULL,
+    phoneNumber varchar(11) NOT NULL
+);
+
+create table customeraddress(
+	id int NOT NULL,
+	addressLine varchar(256) NOT NULL,
+    state varchar(50) NOT NULL,
+    city varchar(50) NOT NULL,
+    zipCode varchar(8) NOT NULL
+);
+
+alter table customeraddress add constraint ca_fkey foreign key (id) references customers(id);
+alter table customeraddress add constraint ca_pkey primary key (id);
+
+
+
+create table products (
+	id int primary key auto_increment,
+    name varchar(250) NOT NULL,
+    price decimal(10, 2) NOT NULL DEFAULT 0, 
+    description text DEFAULT NULL,
+    brandID int DEFAULT NULL,
+    categoryID int NOT NULL
+);
+
+alter table products add constraint p_fkey1 foreign key(brandID) references brands(id);
+alter table products add constraint p_fkey2 foreign key(categoryID) references categories(id);
+
+create table productidentifier (
+    upc varchar(12) NOT NULL,
+    sku varchar(64) NOT NULL,
+    id int NOT NULL
+);
+
+alter table productidentifier add constraint pi_pkey primary key(upc, sku);
+alter table productidentifier add constraint pi_fkey foreign key(id) references products(id) ON DELETE CASCADE;
+
+create table reviews (
+    customerID int NOT NULL,
+    productID int NOT NULL,
+    rating int(1) NOT NULL,
+    review text DEFAULT NULL
+);
+alter table reviews add foreign key (customerID) references customers(id) ON DELETE CASCADE;
+alter table reviews add foreign key (productID) references products(id) ON DELETE CASCADE;
+alter table reviews add primary key (customerID, productID);
+
+create table inventory (
+    productID int NOT NULL,
+    quantity int NOT NULL DEFAULT 0,
+    lastUpdated date NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+alter table inventory add foreign key (productID) references products(id) ON DELETE CASCADE;
+alter table inventory add primary key (productID);
+
+create table productimages(
+    productID int NOT NULL,
+    link varchar(256) NOT NULL
+);
+alter table productimages add foreign key (productID) references products(id) ON DELETE CASCADE;
+
+create table cartitem(
+    customerID int NOT NULL,
+    productID int NOT NULL,
+    quantity int NOT NULL
+);
+alter table cartitem add foreign key (customerID) references customers(id) ON DELETE CASCADE;
+alter table cartitem add foreign key (productID) references products(id) ON DELETE CASCADE;
+alter table cartitem add primary key (customerID, productID);
+
+create table order(
+    no int NOT NULL auto_increment,
+    customerID int NOT NULL,
+    orderDate date NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    totalAmount decimal(10,2) NOT NULL DEFAULT 0,
+    ShippedDate date DEFAULT NULL,
+    status varchar(10) NOT NULL DEFAULT 'Pending'
+);
+alter table cartitem add foreign key (customerID) references customers(id) ON DELETE CASCADE;
+alter table cartitem add primary key (no);
+
+create table orderitems(
+    orderNo int NOT NULL,
+    productID int NOT NULL,
+    quantity int NOT NULL,
+    amount decimal(10,2) NOT NULL
+);
+alter table orderitems add foreign key (orderNo) references order(no) ON DELETE CASCADE;
+alter table orderitems add foreign key (productID) references products(id) ON DELETE CASCADE;
+alter table orderitems add primary key (orderNo, productID);

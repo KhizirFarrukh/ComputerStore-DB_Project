@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customers</title>
+    <link rel="stylesheet" href="/customer.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="search-bar">
+        <div class="search-wrapper">
+          <div class="search-icon-wrapper">
+            <i class="fas fa-search fa-lg searchIcon"></i>
+          </div>
+          <input class="search" type="text" placeholder="Search ID, Email, First Name, Last Name or Phone Number" />
+        </div>
+      </div>
+      <table class="data-table" style="width: 100%">
+        <thead>
+          <tr class="table-columns">
+            <th scope="col">ID</th>
+            <th scope="col">Email</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Phone Number</th>
+            <th scope="col">Address</th>
+            <th scope="col">State</th>
+            <th scope="col">City</th>
+            <th scope="col">Zip Code</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for(let i = 0 ; i < customers.length ; i++) { %>
+          <tr>
+            <td data-label="ID"><%= customers[i].id %></td>
+            <td data-label="Email"><%= customers[i].email %></td>
+            <td data-label="First Name"><%= customers[i].firstName %></td>
+            <td data-label="Last Name"><%= customers[i].lastName %></td>
+            <td data-label="Phone Number"><%= customers[i].phoneNumber %></td>
+            <td data-label="Address"><%= customers[i].addressLine == null ? 'Not Set' : customers[i].addressLine %></td>
+            <td data-label="State"><%= customers[i].state == null ? 'Not Set' : customers[i].state %></td>
+            <td data-label="City"><%= customers[i].city == null ? 'Not Set' : customers[i].city %></td>
+            <td data-label="Zip Code"><%= customers[i].zipCode == null ? 'Not Set' : customers[i].zipCode %></td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+      <div class="pages">
+        <% if(pagination) { if(currentPage - 1 > 0) { %>
+        <a href="?page=<%= currentPage-1 %>&searchVal=<%= searchVal %>">&lt;</a>
+        <% } %> <% } %> <% for(let i = pageStart ; i <= pageEnd ; i++) { %>
+        <a href="?page=<%= i %>&searchVal=<%= searchVal %>"><%= i %></a>
+        <% } %> <% if(pagination) { if(currentPage + 1 <= maxPage) { %>
+        <a href="?page=<%= currentPage+1 %>&searchVal=<%= searchVal %>">&gt;</a>
+        <% } %> <% } %>
+      </div>
+    </div>
+  </body>
+  <script src="https://kit.fontawesome.com/85c08616f2.js" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    $(document).ready(() => {
+      $(".search").on("input", (event) => {
+        const searchVal = $(".search").val();
+        $.ajax({
+          type: "get",
+          data: {
+            searchVal: searchVal,
+          },
+          success: (response) => {
+            $(".data-table").html(jQuery(response).find(".data-table").html());
+            $(".pages").html(jQuery(response).find(".pages").html());
+          },
+          error: (error) => {
+            console.log(error);
+            alert("Error retrieving data!");
+          },
+        });
+      });
+    });
+  </script>
+</html>

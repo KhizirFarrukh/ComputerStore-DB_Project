@@ -1,0 +1,19 @@
+.LoginBody {
+    margin-top: 3%;
+    font-size: 28px;
+    padding-left: 12%;
+}
+
+.loginContainer {
+    margin-left: 5%;
+}
+
+.signupContainer {
+    margin-left: 5%;
+}
+.inputBox {
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 200px;
+    height: 28px;
+}
